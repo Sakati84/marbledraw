@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="viewport" content="width=560px, initial-scale=1, minimum-scale=1, user-scalable=no" />
+  <!--<meta name="viewport" content="width=560px, initial-scale=1, minimum-scale=1, user-scalable=no" />-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MarbleDraw</title>
   
   <script type="text/javascript">
@@ -99,16 +100,20 @@
 </head>
 <body>
 
-<img src="Background.JPG", width="560" height="895">
-<div id="board">
-	 <script type="text/javascript">
+<div id="main", style="width:100%">
+	<div id="inner", style="/*position:absolute;*/", width="560">
+		<img src="Background.JPG", width="560" height="895">
+		<div id="board">
+			<script type="text/javascript">
 
-		fetch('./level.json')
-		.then((response) => response.json())
-		.then((json) => { data = json; loadBoard(json.Level[levelIndex], colors)});
+				fetch('./level.json')
+				.then((response) => response.json())
+				.then((json) => { data = json; loadBoard(json.Level[levelIndex], colors)});
 
-	 </script>
-</div> 
+			</script>
+		</div>
+	</div>
+</div>
 
 <img id="arrowleft", src="Arrow_Left.JPG", onclick="prevLevel()", style="position: absolute; top: 400px; left: 20px;">
 <img id="arrowright", src="Arrow_Right.JPG", onclick="nextLevel()", style="position: absolute; top: 400px; left: 470px;">
