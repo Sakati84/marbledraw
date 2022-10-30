@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MarbleDraw</title>
+  
+  <script type="text/javascript">
+
+	levelIndex = 0;
+	colors = ["red", "blue", "yellow", "white"];
+	data = [];
+
+  	function addMarble(x, y, color)
+	{		
+		var src = document.getElementById("board");
+		var circle = document.createElement("div");
+		circle.style="border-radius: 50%; width: 46px; height: 46px; position:absolute;";
+		circle.style.background = color;
+		circle.style.left= x + "px";
+		circle.style.top= y + "px";
+		circle.style.outline= "2px solid #444444";
+		circle.style.outlineOffset = "-2px";
+		src.appendChild(circle);
+
+		/*var img = document.createElement("img");
+		img.src = "marble.png";
+		img.style="position:absolute;";
+		img.style.left= x + "px";
+		img.style.top= y + "px";
+		src.appendChild(img);*/
+	}
+	
+	function loadBoard(data)
+	{
+		console.log(levelIndex);
+
+		//clear
+		var src = document.getElementById("board");
+		src.innerHTML = '';
+
+		//task
+		offsetX = 128;
+		offsetY = 199;
+		step = 34;
+		
+		for(i=0; i<5; i++)
+		{
+			for(j=0; j<5; j++)
+			{
+				index = (4-i) + j * 5;
+
+				if(data.TaskColorMap[index] >= 0)
+				{
+					addMarble(offsetX + i * step + j * step, offsetY + i * step + j * -step, colors[data.TaskColorMap[index]]);
+				}
+			}
+		}
+
+		//goal
+		offsetY = 666;
+		
+		for(i=0; i<5; i++)
+		{
+			for(j=0; j<5; j++)
+			{
+				index = (4-i) + j * 5;
+
+				if(data.ColorMap[index] >= 0)
+				{
+					addMarble(offsetX + i * step + j * step, offsetY + i * step + j * -step, colors[data.ColorMap[index]]);
+				}
+			}
+		}
+	}
+
+	function nextLevel()
+	{
+		if(data.Level.length-1 > levelIndex) levelIndex++;
+		loadBoard(data.Level[levelIndex], colors)
+
+		var src = document.getElementById("levelnumber");
+		src.innerHTML = '<b>#' + (levelIndex+1) + "</b>";
+	}
+
+	function prevLevel()
+	{
+		if(levelIndex > 0) levelIndex--;
+		loadBoard(data.Level[levelIndex], colors)
+
+		var src = document.getElementById("levelnumber");
+		src.innerHTML = '<b>#' + (levelIndex+1) + "</b>";
+	}
+
+   </script>
+	 
+</head>
+<body>
+
+<img src="Background.JPG", width="560" height="895">
+<div id="board">
+	 <script type="text/javascript">
+
+		fetch('./level.json')
+		.then((response) => response.json())
+		.then((json) => { data = json; loadBoard(json.Level[levelIndex], colors)});
+
+	 </script>
+</div> 
+
+<img id="arrowleft", src="Arrow_Left.JPG", onclick="prevLevel()", style="position: absolute; top: 400px; left: 20px;">
+<img id="arrowright", src="Arrow_Right.JPG", onclick="nextLevel()", style="position: absolute; top: 400px; left: 470px;">
+<div id="levelnumber" style="font-size:82px; font-family:Trebuchet MS, sans-serif; position:absolute; top:20px; left:410px; text-align: right;"> <b>#1</b> </div>
+
+</body>
+</html>
