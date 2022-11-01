@@ -41,6 +41,30 @@
 	colors = ["red", "blue", "yellow", "white"];
 	data = [];
 
+	function setCookie(cname, cvalue) 
+	{
+		const d = new Date();
+		d.setTime(d.getTime() + (1000 * 24 * 60 * 60 * 1000));
+		let expires = "expires="+d.toUTCString();
+		document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+	}
+
+	function getCookie(cname, defaultValue) 
+	{
+		let name = cname + "=";
+		let ca = document.cookie.split(';');
+		for(let i = 0; i < ca.length; i++) {
+			let c = ca[i];
+			while (c.charAt(0) == ' ') {
+			c = c.substring(1);
+			}
+			if (c.indexOf(name) == 0) {
+			return c.substring(name.length, c.length);
+			}
+		}
+		return defaultValue;
+	}
+
   	function addMarble(x, y, color)
 	{		
 		var src = document.getElementById("board");
@@ -66,13 +90,18 @@
 	{
 		console.log(levelIndex);
 
+		colors[0] = getCookie("color1", colors[0]);
+		colors[1] = getCookie("color2", colors[1]);
+		colors[2] = getCookie("color3", colors[2]);
+		colors[3] = getCookie("color4", colors[3]);
+
 		//clear
 		var src = document.getElementById("board");
 		src.innerHTML = '';
 
 		//task
-		offsetX = 128;
-		offsetY = 199;
+		offsetX = 128-8;
+		offsetY = 199-8;
 		step = 34;
 		
 		for(i=0; i<5; i++)
@@ -89,7 +118,7 @@
 		}
 
 		//goal
-		offsetY = 666;
+		offsetY = 666-8;
 		
 		for(i=0; i<5; i++)
 		{
@@ -103,24 +132,64 @@
 				}
 			}
 		}
+
+		//nr
+		var src = document.getElementById("levelnumber");
+		src.innerHTML = '<b>#' + (levelIndex+1) + "</b>";
 	}
 
 	function nextLevel()
 	{
 		if(data.Level.length-1 > levelIndex) levelIndex++;
 		loadBoard(data.Level[levelIndex], colors)
-
-		var src = document.getElementById("levelnumber");
-		src.innerHTML = '<b>#' + (levelIndex+1) + "</b>";
 	}
 
 	function prevLevel()
 	{
 		if(levelIndex > 0) levelIndex--;
 		loadBoard(data.Level[levelIndex], colors)
+	}
 
-		var src = document.getElementById("levelnumber");
-		src.innerHTML = '<b>#' + (levelIndex+1) + "</b>";
+	function changeMenu(menuPos)
+	{
+		document.getElementById("M1").className  = "";
+		document.getElementById("M2").className  = "";
+		document.getElementById("M3").className  = "";
+		document.getElementById("M4").className  = "";
+		document.getElementById("M5").className  = "";
+
+		document.getElementById("M" + menuPos).className  = "active";
+
+		if(menuPos == 2)
+		{
+			document.getElementById("Game").style.display = "block";
+			document.getElementById("Settings").style.display = "none";
+
+			levelIndex = 0;
+			loadBoard(data.Level[levelIndex], colors);
+		}
+		if(menuPos == 3)
+		{
+			document.getElementById("Game").style.display = "block";
+			document.getElementById("Settings").style.display = "none";
+
+			levelIndex = 10;
+			loadBoard(data.Level[levelIndex], colors);
+		}
+		if(menuPos == 4)
+		{
+			document.getElementById("Game").style.display = "block";
+			document.getElementById("Settings").style.display = "none";
+
+			levelIndex = 25;
+			loadBoard(data.Level[levelIndex], colors);
+		}
+
+		if(menuPos == 5)
+		{
+			document.getElementById("Game").style.display = "none";
+			document.getElementById("Settings").style.display = "block";
+		}
 	}
 
    </script>
@@ -129,7 +198,30 @@
 <body>
 
 <div id="main", style="width:100%">
-	<div id="inner", style="/*position:absolute;*/", width="560">
+
+	<style>
+		td.active 
+		{
+			background-color: #000000;
+			color: white;
+		}
+	</style>
+
+	<!-- MENU-->
+	<div id="menu">
+		<table style="font-size:30px; font-family:Trebuchet MS, sans-serif; text-align: center;", width="560px">
+			<tr>
+				<td id="M1", class="active" onclick="changeMenu(1)">Tutorial</td>
+				<td id="M2", onclick="changeMenu(2)">Easy</td>
+				<td id="M3", onclick="changeMenu(3)">Medium</td>
+				<td id="M4", onclick="changeMenu(4)">Hard</td>
+				<td id="M5", onclick="changeMenu(5)">Settings</td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- GAME -->
+	<div id="Game", width="560", style="position:absolute; top:64px; left:8px;">
 		<img src="Background.JPG", width="560" height="895">
 		<div id="board">
 			<script type="text/javascript">
@@ -140,12 +232,59 @@
 
 			</script>
 		</div>
+
+		<img id="arrowleft", src="Arrow_Left.JPG", onclick="prevLevel()", style="position: absolute; top: 400px; left: 20px;">
+		<img id="arrowright", src="Arrow_Right.JPG", onclick="nextLevel()", style="position: absolute; top: 400px; left: 470px;">
+		<div id="levelnumber" style="font-size:82px; font-family:Trebuchet MS, sans-serif; position:absolute; top:20px; left:410px; text-align: right;"> <b>#1</b> </div>
+	</div>
+
+	<!--SETTINGS-->
+	<div id="Settings", width="560, style="display: none;">
+		<div id="colors">
+			<br />
+			<br />
+			<br />
+			<br />
+			<div id="levelnumber" style="font-size:52px; font-family:Trebuchet MS, sans-serif;"> <b><center>Marble Colors</center></b> </div>
+			<table style="font-size:32px; font-family:Trebuchet MS, sans-serif; margin-left: auto;margin-right: auto;", width="330px">
+				<tr>
+					<td> <label for="favcolor1">Marble A (12x):</label> </td>
+					<td> <input type="color" id="favcolor1" name="favcolor1" value="#ff0000"> </td>
+				</tr>
+				<tr>
+					<td> <label for="favcolor2">Marble B (10x):</label> </td>
+						<td> <input type="color" id="favcolor2" name="favcolor2" value="#ff0000"> </td>
+				</tr>
+				<tr>
+					<td> <label for="favcolor3">Marble C (8x):</label> </td>
+						<td> <input type="color" id="favcolor3" name="favcolor3" value="#ff0000"> </td>
+				</tr>
+				<tr>
+					<td> <label for="favcolor4">Marble D (6x):</label> </td>
+					<td> <input type="color" id="favcolor4" name="favcolor4" value="#ff0000"> </td>
+				</tr>
+			</table>
+
+			<script type="text/javascript">
+				var c1 = document.getElementById("favcolor1");
+				c1.value = getCookie("color1", "#ff0000");
+				c1.addEventListener('change', (event) => { setCookie("color1", c1.value) });
+
+				var c2 = document.getElementById("favcolor2");
+				c2.value = getCookie("color2", "#0000ff");
+				c2.addEventListener('change', (event) => { setCookie("color2", c2.value) });
+
+				var c3 = document.getElementById("favcolor3");
+				c3.value = getCookie("color3", "#ffff00");
+				c3.addEventListener('change', (event) => { setCookie("color3", c3.value) });
+
+				var c4 = document.getElementById("favcolor4");
+				c4.value = getCookie("color4", "#ffffff");
+				c4.addEventListener('change', (event) => { setCookie("color4", c4.value) });
+			</script>
+		</div>
 	</div>
 </div>
-
-<img id="arrowleft", src="Arrow_Left.JPG", onclick="prevLevel()", style="position: absolute; top: 400px; left: 20px;">
-<img id="arrowright", src="Arrow_Right.JPG", onclick="nextLevel()", style="position: absolute; top: 400px; left: 470px;">
-<div id="levelnumber" style="font-size:82px; font-family:Trebuchet MS, sans-serif; position:absolute; top:20px; left:410px; text-align: right;"> <b>#1</b> </div>
 
 </body>
 </html>
