@@ -221,24 +221,26 @@
 	</div>
 
 	<!-- GAME -->
-	<div id="Game", width="560", style="position:absolute; top:64px; left:8px;">
-		<img src="Background.JPG", width="560" height="895">
-		<div id="board">
-			<script type="text/javascript">
+	<section id="container" class="container">
+		<div id="Game", width="560", style="position:absolute; top:64px; left:8px;">
+			<img src="Background.JPG", width="560" height="895">
+			<div id="board">
+				<script type="text/javascript">
 
-				fetch('./level.json')
-				.then((response) => response.json())
-				.then((json) => { data = json; loadBoard(json.Level[levelIndex], colors)});
+					fetch('./level.json')
+					.then((response) => response.json())
+					.then((json) => { data = json; loadBoard(json.Level[levelIndex], colors)});
 
-			</script>
+				</script>
+			</div>
+
+			<img id="arrowleft", src="Arrow_Left.JPG", onclick="prevLevel()", style="position: absolute; top: 400px; left: 20px;">
+			<img id="arrowright", src="Arrow_Right.JPG", onclick="nextLevel()", style="position: absolute; top: 400px; left: 470px;">
+			<div id="levelnumber" style="font-size:82px; font-family:Trebuchet MS, sans-serif; position:absolute; top:20px; left:410px; text-align: right;"> <b>#1</b> </div>
+			
+			<img id="fullscreen", src="Fullscreen.png", onclick="screenfull.toggle(document.getElementById('container'))", style="opacity: 0.05; position: absolute; top: 20px; right: 20px; width: 50px; height: 50px;">
 		</div>
-
-		<img id="arrowleft", src="Arrow_Left.JPG", onclick="prevLevel()", style="position: absolute; top: 400px; left: 20px;">
-		<img id="arrowright", src="Arrow_Right.JPG", onclick="nextLevel()", style="position: absolute; top: 400px; left: 470px;">
-		<div id="levelnumber" style="font-size:82px; font-family:Trebuchet MS, sans-serif; position:absolute; top:20px; left:410px; text-align: right;"> <b>#1</b> </div>
-		
-		<img id="fullscreen", src="Fullscreen.png", onclick="screenfull.toggle(document.getElementById('Game'))", style="opacity: 0.05; position: absolute; top: 20px; right: 20px; width: 50px; height: 50px;">
-	</div>
+	</section>
 
 	<!--SETTINGS-->
 	<div id="Settings", width="560, style="display: none;">
@@ -281,7 +283,7 @@
 				c3.addEventListener('change', (event) => { setCookie("color3", c3.value) });
 
 				var c4 = document.getElementById("favcolor4");
-				c4.value = getCookie("color4", "#ffffff");
+				c4.value = getCookie("color4", "#00ff00");
 				c4.addEventListener('change', (event) => { setCookie("color4", c4.value) });
 			</script>
 		</div>
