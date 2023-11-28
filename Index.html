@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <!--<meta name="viewport" content="width=560px, initial-scale=1, minimum-scale=1, user-scalable=no" />-->
-  <!--<meta name="viewport" content="width=device-width">-->
+  <meta name="viewport" content="width=device-width minimum-scale=1.0 maximum-scale=1.0 user-scalable=no" />
   <title>MarbleDraw</title>
-
+  <script type="text/javascript" src="screenfull.js"></script>
+  
 <meta id="viewport" name="viewport">
 
 <script type="text/javascript">
@@ -236,6 +236,8 @@
 		<img id="arrowleft", src="Arrow_Left.JPG", onclick="prevLevel()", style="position: absolute; top: 400px; left: 20px;">
 		<img id="arrowright", src="Arrow_Right.JPG", onclick="nextLevel()", style="position: absolute; top: 400px; left: 470px;">
 		<div id="levelnumber" style="font-size:82px; font-family:Trebuchet MS, sans-serif; position:absolute; top:20px; left:410px; text-align: right;"> <b>#1</b> </div>
+		
+		<img id="fullscreen", src="Fullscreen.png", onclick="screenfull.toggle(document.getElementById('Game'))", style="opacity: 0.05; position: absolute; top: 20px; right: 20px; width: 50px; height: 50px;">
 	</div>
 
 	<!--SETTINGS-->
